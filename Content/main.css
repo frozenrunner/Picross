@@ -1,0 +1,26 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    align-items: center;
+    background: black;
+    display: flex;
+    flex-flow: row nowrap;
+    height: 100%;
+    justify-content: center;
+    margin: 0;
+    width: 100%;
+}
+
+.ui-container {
+    border: 1px solid blue;
+    height: 40rem;
+    width: 90rem;
+}
