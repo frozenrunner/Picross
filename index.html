@@ -6,9 +6,29 @@
     <title>Picross</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="Content/main.css" />
+    <script src="Scripts/knockout-3.4.2.js"></script>
     <script src="Scripts/main.js"></script>
+    <script type="text/javascript">
+        var imageData = [];
+        imageData[0] =  ["--gray-dark","--gray-dark",0,0,0,0,0,0,0,0,0,0]
+        imageData[1] =  ["--black",0,0,0,0,0,0,0,0,0,0,0]
+        imageData[2] =  ["--black",0,0,"--green-dark","--green-dark","--green-dark","--green-dark","--green-dark","--green-dark",0,0,0]
+        imageData[3] =  ["--black",0,"--green-dark","--green-dark",1,1,1,"--gray-light","--green-dark","--green-dark",0,0]
+        imageData[4] =  ["--black","--green-dark","--green-dark",1,1,1,1,1,1,"--green-dark","--green-dark",0]
+        imageData[5] =  ["--black","--green-dark",1,1,1,1,1,1,1,1,1,0]
+        imageData[6] =  ["-yellow-dark","--red","--red","--red","--red","--red","--red","--red","--red","--red","--red",0]
+        imageData[7] =  ["-yellow-dark","--black","--black","--black","--black","--black","--black","--black","--black","--black","--black","--gray-light"]
+        imageData[8] =  ["-yellow-dark","--red","--red","--red","--red","--black","--black","--red","--red","--red","--red","--gray-light"]
+        imageData[9] =  ["-yellow-dark",1,1,"--red","--red","--black","--black","--red","--red","--gray-dark","--gray-dark","--gray-light"]
+        imageData[10] = ["-yellow-dark",1,1,1,"--red","--black","--black","--red","--gray-dark","--green-light","--gray-dark","--gray-light"]
+        imageData[11] = [0,1,1,1,"--red","--black","--black","--red",1,1,"--gray-dark",0]
+        imageData[12] = [0,0,0,1,"--red","--black","--black","--red",1,0,0,0]
+        imageData[13] = [0,0,0,0,"--red","--black","--black","--red",0,0,0,0]
+    </script>
 </head>
 <body>
-    <div class="ui-container"></div>
+    <div class="ui-main-container">
+        
+    </div>
 </body>
 </html>

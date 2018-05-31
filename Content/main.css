@@ -2,6 +2,17 @@
     box-sizing: border-box;
 }
 
+:root {
+    --black: #000;
+    --gray-dark: #737373;
+    --gray-light: #A1A1A1;
+    --green-dark: #49851C;
+    --green-light: #62B326;
+    --red: #D92E2E;
+    --yellow-dark: #F0C537;
+    --yellow-light: #F0E32B;
+}
+
 html {
     font-size: 62.5%;
     height: 100%;
@@ -9,18 +20,14 @@ html {
 }
 
 body {
-    align-items: center;
-    background: black;
-    display: flex;
-    flex-flow: row nowrap;
     height: 100%;
-    justify-content: center;
     margin: 0;
     width: 100%;
 }
 
-.ui-container {
-    border: 1px solid blue;
-    height: 40rem;
-    width: 90rem;
+.ui-main-container {
+    border: 1px solid rgba(0,0,0,.6);
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(14, 1fr);
 }
