@@ -26,8 +26,40 @@ body {
 }
 
 .ui-main-container {
-    border: 1px solid rgba(0,0,0,.6);
+    /* border: 1px solid rgba(0,0,0,.6); */
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: repeat(14, 1fr);
+    grid-template-columns: repeat(12, 5em);
+    grid-template-rows: repeat(14, 5em);
+}
+
+.black-square {
+    background: var(--black);
+}
+
+.gray-dark-square {
+    background: var(--gray-dark);
+}
+
+.gray-light-square {
+    background: var(--gray-light);
+}
+
+.green-dark-square {
+    background: var(--green-dark);
+}
+
+.green-light-square {
+    background: var(--green-light);
+}
+
+.red-square {
+    background: var(--red);
+}
+
+.yellow-dark-square {
+    background: var(--yellow-dark);
+}
+
+.yellow-light-square {
+    background: var(--yellow-light);
 }
