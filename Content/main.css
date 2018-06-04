@@ -20,16 +20,63 @@ html {
 }
 
 body {
+    align-items:  center;
+    display: flex;
+    flex-flow: row nowrap;
     height: 100%;
+    justify-content: center;
     margin: 0;
     width: 100%;
 }
 
 .ui-main-container {
-    /* border: 1px solid rgba(0,0,0,.6); */
     display: grid;
-    grid-template-columns: repeat(12, 5em);
+    grid-template-columns: 5rem 61.3rem;
+    grid-template-rows: 5rem 71.5rem;
+}
+
+.ui-column-numbers {
+    display: flex;
+    flex-flow: row nowrap;
+    grid-column: 2/13;
+}
+
+.ui-row-numbers {
+    display: flex;
+    flex-flow: column nowrap;
+    grid-row: 2/15;
+}
+
+.ui-number-hint {
+    align-items: center;
+    display: flex;
+    font-size: 2.2rem;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+}
+
+.ui-game-container {
+    background: rgba(0,0,0,.2);
+    border: 1px solid rgba(0,0,0,.6);
+    display: grid;
+    grid-template-columns: repeat(12, 5em); /*fix me later*/
     grid-template-rows: repeat(14, 5em);
+    grid-gap: .1rem .1rem;
+}
+
+
+.ui-square-container {
+    background: #FFF;
+}
+
+.ui-square-container div {
+    height: 100%;
+    width: 100%;
+}
+
+.ui-square-container:hover {
+    background: rgba(0,0,0,.6);
 }
 
 .black-square {
@@ -62,4 +109,8 @@ body {
 
 .yellow-light-square {
     background: var(--yellow-light);
+}
+
+.ui-hidden {
+    visibility: hidden;
 }

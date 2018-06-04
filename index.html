@@ -8,16 +8,24 @@
     <link rel="stylesheet" type="text/css" media="screen" href="Content/main.css" />
     <script src="Scripts/knockout-3.4.2.js"></script>
     <script src="Scripts/main.js" defer></script>
-    <script type="text/javascript">
-        
-    </script>
 </head>
 <body>
-    <div class="ui-main-container" data-bind="foreach: imageData">
-        <!-- ko foreach: $data -->
-        <div data-bind="css: $data">
+    <div class="ui-main-container">
+        <div class="ui-dead"></div>
+        <div class="ui-column-numbers" data-bind="foreach: imageData[0]">
+            <div class="ui-number-hint" data-bind="text: getRowNumbers($index)"></div>
         </div>
-        <!-- /ko -->
+        <div class="ui-row-numbers" data-bind="foreach: imageData">
+            <div class="ui-number-hint" data-bind="text: getColumnNumbers($data)"></div>
+        </div>
+        <div class="ui-game-container" data-bind="foreach: imageData">
+            <!-- ko foreach: $data -->
+            <div class="ui-square-container"  data-bind="click: revealSquare.bind($data, $parentContext.$index(), $index())">
+                <div data-bind="attr: { class: $data, 'data-row': $parentContext.$index(), 'data-column': $index}, css: {'ui-hidden': userBoard()[$parentContext.$index()][$index()]() === 0 }">
+                </div>
+            </div>
+            <!-- /ko -->
+        </div>
     </div>
 </body>
 </html>
