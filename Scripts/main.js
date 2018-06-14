@@ -14,10 +14,12 @@ imageData[11] = ['',"gray-dark-square","green-dark-square","green-light-square",
 imageData[12] = ['','','',"green-dark-square","red-square","black-square","black-square","red-square","green-light-square",'','',''];
 imageData[13] = ['','','','',"red-square","black-square","black-square","red-square",'','','',''];
 
-var ViewModel = function() {
+let picross = {};
+picross.viewModel = function() {
     let self = this;
     self.imageData = ko.observableArray(imageData);
     self.userBoard = ko.observable(initUserBoard());
+    self.checkActive = ko.observable(true);
 
     function initUserBoard() {
         let userBoardArrayRows = [];
@@ -32,31 +34,85 @@ var ViewModel = function() {
         return userBoardArrayRows;
     }
 
-    self.getColumnNumbers = function(data) {
+    self.getRowNumbers = function(data) {
         let count = 0;
+        let rowString = '';
         for(let i = 0, len = data.length; i < len; i++){
             if (data[i] !== ''){
                 count++;
             }
+            else {
+                if (count > 0){
+                    if (rowString.length > 0){
+                        rowString += '    ';
+                    }
+                    rowString += count.toString();
+                    count = 0;
+                }
+            }
         }
-        return count;
-    }
+        if (count > 0 && count < data.length) {
+            rowString = count.toString();
+        }
+        if (count === data.length){
+            rowString = count.toString();
+        }
+        return rowString;
+    };
 
-    self.getRowNumbers = function(data) {
+    self.getColumnNumbers = function(data) {
         let count = 0;
+        let columnString = '';
         for(let i = 0, len = self.imageData().length; i < len; i++){
             if (imageData[i][data()] !== ''){
                 count++;
             }
+            else {
+                if (count > 0){
+                    if (columnString.length > 0){
+                        columnString += '\r\n';
+                    }
+                    columnString += count.toString();
+                    count = 0;
+                }
+            }
         }
-        return count;
-    }
+        if (count > 0 && count < self.imageData().length) {
+            columnString = count.toString();
+        }
+        if (count === self.imageData().length){
+            columnString = count.toString();
+        }
+
+        return columnString;
+    };
 
     self.revealSquare = function(row, column) {
         if (self.imageData()[row][column] !== ''){
             self.userBoard()[row][column](1);
         }
+    };
+
+    self.activateCross = function() {
+        self.checkActive(false);
+    }
+
+    self.activateCheck = function() {
+        self.checkActive(true);
     }
 }
 
-ko.applyBindings(ViewModel);
+picross.view = function() {
+    let ret = {};
+    
+    ret.model = new picross.viewModel();
+
+    ret.init = function() {
+        ko.applyBindings(ret.model, document.getElementById("picross"));
+    }
+    
+    return ret;
+};
+
+picross.view.instance = picross.view();
+picross.view.instance.init();

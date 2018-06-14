@@ -19,6 +19,19 @@ html {
     width: 100%;
 }
 
+
+@media screen and (max-height: 800px) {
+    html {
+        font-size: 52.5%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    html {
+        font-size: 52.5%;
+    }
+}
+
 body {
     align-items:  center;
     display: flex;
@@ -31,40 +44,48 @@ body {
 
 .ui-main-container {
     display: grid;
-    grid-template-columns: 5rem 61.3rem;
-    grid-template-rows: 5rem 71.5rem;
+    grid-template-columns: 5rem 60rem 5rem;
+    grid-template-rows: 5rem 70rem;
 }
 
 .ui-column-numbers {
     display: flex;
     flex-flow: row nowrap;
-    grid-column: 2/13;
+    grid-column-start: 2;
 }
 
 .ui-row-numbers {
     display: flex;
     flex-flow: column nowrap;
-    grid-row: 2/15;
+    grid-column-start: 1;
 }
 
 .ui-number-hint {
-    align-items: center;
     display: flex;
     font-size: 2.2rem;
     height: 100%;
-    justify-content: center;
+    white-space: pre;
     width: 100%;
+}
+
+.ui-number-hint-column {
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.ui-number-hint-row {
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .ui-game-container {
     background: rgba(0,0,0,.2);
     border: 1px solid rgba(0,0,0,.6);
     display: grid;
-    grid-template-columns: repeat(12, 5em); /*fix me later*/
-    grid-template-rows: repeat(14, 5em);
-    grid-gap: .1rem .1rem;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(14, 1fr);
+    grid-gap: 1px;
 }
-
 
 .ui-square-container {
     background: #FFF;
@@ -113,4 +134,26 @@ body {
 
 .ui-hidden {
     visibility: hidden;
+}
+
+.ui-button-container {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+}
+
+.ui-button-container div {
+    cursor: pointer;
+}
+
+.ui-button-cross.active {
+    color: var(--red);
+}
+
+.ui-button-check.active {
+    color: var(--green-light);
+}
+
+.ui-button-container .material-icons {
+    font-size: 5rem;
 }
