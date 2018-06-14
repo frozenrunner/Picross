@@ -88,8 +88,10 @@ picross.viewModel = function() {
     };
 
     self.revealSquare = function(row, column) {
-        if (self.imageData()[row][column] !== ''){
-            self.userBoard()[row][column](1);
+        if (self.checkActive()){
+            if (self.imageData()[row][column] !== ''){
+                self.userBoard()[row][column](1);
+            }
         }
     };
 
