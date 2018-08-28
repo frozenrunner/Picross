@@ -11,6 +11,7 @@
     <script src="Scripts/main.js" defer></script>
 </head>
 <body>
+    <input type="file" id="fileInput"/>
     <div id="picross" class="ui-main-container">
         <div class="ui-column-numbers" data-bind="foreach: imageData">
             <div class="ui-number-hint ui-number-hint-column" data-bind="text: $parent.getColumnNumbers($index)"></div>
@@ -18,10 +19,10 @@
         <div class="ui-row-numbers" data-bind="foreach: imageData">
             <div class="ui-number-hint ui-number-hint-row" data-bind="text: $parent.getRowNumbers($data)"></div>
         </div>
-        <div class="ui-game-container" data-bind="foreach: imageData">
+        <div id="gameContainer" class="ui-game-container" data-bind="foreach: imageData">
             <!-- ko foreach: $data -->
-            <div class="ui-square-container"  data-bind="click: $parents[1].revealSquare.bind($data, $parentContext.$index(), $index())">
-                <div data-bind="attr: { class: $data, 'data-row': $parentContext.$index(), 'data-column': $index}, css: {'ui-hidden': $parents[1].userBoard()[$parentContext.$index()][$index()]() === 0 }">
+            <div class="ui-square-container material-icons"  data-bind="click: $parents[1].revealSquare.bind($data, $parentContext.$index(), $index())">
+                <div data-bind="attr: { 'data-row': $parentContext.$index(), 'data-column': $index}, style: {'background': $data}, css: {'ui-hidden': $parents[1].userBoard()[$parentContext.$index()][$index()]() === 0, 'ui-blocked': $parents[1].userBoard()[$parentContext.$index()][$index()]() === 2, 'ui-incorrect': $parents[1].userBoard()[$parentContext.$index()][$index()]() === 3 }">
                 </div>
             </div>
             <!-- /ko -->
@@ -31,5 +32,6 @@
             <div class="ui-button-check" data-bind="css: { active: checkActive }, click: activateCheck"><i class="material-icons">check</i></div>
         </div>
     </div>
+    <script async type="text/javascript" src="Scripts/imageReader.js"></script>
 </body>
 </html>
