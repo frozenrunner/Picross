@@ -8,6 +8,8 @@
 #include <fstream>
 #include <bitset>
 #include <vector>
+#include <math.h>
+#include <cmath>
 #include "HeaderInfo.h"
 #include "Pixel.h"
 #include <emscripten/emscripten.h>
@@ -24,8 +26,7 @@ char* fileContents;
 int fileSize = 0;
 vector<Pixel> pixelVector;
 vector<int> integerPixelVector;
-int imageHeight = 0;
-int imageWidth = 0;
+HeaderInfo header;
 
 int EMSCRIPTEN_KEEPALIVE UncompressData(const char* abSrc, int nLenSrc, char* abDst, int nLenDst)
 {
@@ -85,11 +86,11 @@ int EMSCRIPTEN_KEEPALIVE getChunkLength(char* fileContents, int startByte) {
 }
 
 int EMSCRIPTEN_KEEPALIVE getImageHeight() {
-	return imageHeight;
+	return header.getHeight();
 }
 
 int EMSCRIPTEN_KEEPALIVE getImageWidth() {
-	return imageWidth;
+	return header.getWidth();
 }
 
 void EMSCRIPTEN_KEEPALIVE FilterReverseSubRgbPixel(Pixel previousPixel, char &red, char &green, char &blue) {
@@ -112,6 +113,115 @@ void EMSCRIPTEN_KEEPALIVE FilterReverseUpRgbPixel(Pixel previousPixel, char &red
 void EMSCRIPTEN_KEEPALIVE FilterReverseUpRgbaPixel(Pixel previousPixel, char &red, char &green, char &blue, char &alpha) {
 	FilterReverseUpRgbPixel(previousPixel, red, green, blue);
 	alpha = alpha + (unsigned char)previousPixel.getAlpha();
+}
+
+void EMSCRIPTEN_KEEPALIVE FilterReverseAverageRgbPixel(Pixel previousLeftPixel, Pixel previousUpPixel, char &red, char &green, char &blue) {
+	red = red + floor(((unsigned char)previousLeftPixel.getRed() + (unsigned char)previousUpPixel.getRed())/2);
+	green = green + floor(((unsigned char)previousLeftPixel.getGreen() + (unsigned char)previousUpPixel.getGreen())/2);
+	blue = blue + floor(((unsigned char)previousLeftPixel.getBlue() + (unsigned char)previousUpPixel.getBlue())/2);
+}
+
+void EMSCRIPTEN_KEEPALIVE FilterReverseAverageRgbaPixel(Pixel previousLeftPixel, Pixel previousUpPixel, char &red, char &green, char &blue, char &alpha) {
+	FilterReverseAverageRgbPixel(previousLeftPixel, previousUpPixel, red, green, blue);
+	alpha = alpha + floor(((unsigned char)previousLeftPixel.getAlpha() + (unsigned char)previousUpPixel.getAlpha())/2);
+}
+
+//Do each channel separately
+Pixel EMSCRIPTEN_KEEPALIVE PaethPredictor(Pixel pixelLeft, Pixel pixelUp, Pixel pixelUpLeft) {
+	Pixel paethPixel;
+	unsigned int paethRed;
+	unsigned int paethGreen;
+	unsigned int paethBlue;
+	unsigned int paethAlpha;
+	
+	unsigned int pRed = (pixelLeft.getRed() + pixelUp.getRed() - pixelUpLeft.getRed());
+	unsigned int pGreen = (pixelLeft.getGreen() + pixelUp.getGreen() - pixelUpLeft.getGreen());
+	unsigned int pBlue = (pixelLeft.getBlue() + pixelUp.getBlue() - pixelUpLeft.getBlue());
+	unsigned int pAlpha = (pixelLeft.getAlpha() + pixelUp.getAlpha() - pixelUpLeft.getAlpha());
+
+	unsigned int paRed = abs(int (pRed) - (int) pixelLeft.getRed());
+	unsigned int pbRed = abs(int (pRed) - (int) pixelUp.getRed());
+	unsigned int pcRed = abs(int (pRed) - (int) pixelUpLeft.getRed());
+
+	unsigned int paGreen = abs(int (pGreen) - (int) pixelLeft.getGreen());
+	unsigned int pbGreen = abs(int (pGreen) - (int) pixelUp.getGreen());
+	unsigned int pcGreen = abs(int (pGreen) - (int) pixelUpLeft.getGreen());
+
+	unsigned int paBlue = abs(int (pBlue) - (int) pixelLeft.getBlue());
+	unsigned int pbBlue = abs(int (pBlue) - (int) pixelUp.getBlue());
+	unsigned int pcBlue = abs(int (pBlue) - (int) pixelUpLeft.getBlue());
+
+	cout << "pBlue" << (int) pBlue << endl;
+	cout << "pixelLeftBlue" << (int) pixelLeft.getBlue() << endl;
+	cout << "pixelUpBlue" << (int) pixelUp.getBlue() << endl;
+	cout << "pixelUpLeftBlue" << (int) pixelUpLeft.getBlue() << endl;
+	cout << "paBlue" << abs(int (pBlue) - (int) pixelLeft.getBlue()) << endl;
+	cout << "pbBlue" << abs(int (pBlue) - (int) pixelUp.getBlue()) << endl;
+	cout << "pcBlue" << abs(int (pBlue) - (int) pixelUpLeft.getBlue()) << endl;
+
+	unsigned int paAlpha = abs(int (pAlpha) - (int) pixelLeft.getAlpha());
+	unsigned int pbAlpha = abs(int (pAlpha) - (int) pixelUp.getAlpha());
+	unsigned int pcAlpha = abs(int (pAlpha) - (int) pixelUpLeft.getAlpha());
+
+	if (paRed <= pbRed && paRed <= pcRed) {
+		paethRed = pixelLeft.getRed();
+	}
+	else if (pbRed <= pcRed) {
+		paethRed = pixelUp.getRed();
+	}
+	else {
+		paethRed = pixelUpLeft.getRed();
+	}
+
+	if (paGreen <= pbGreen && paGreen <= pcGreen) {
+		paethGreen = pixelLeft.getGreen();
+	}
+	else if (pbGreen <= pcGreen) {
+		paethGreen = pixelUp.getGreen();
+	}
+	else {
+		paethGreen = pixelUpLeft.getGreen();
+	}
+
+	if (paBlue <= pbBlue && paBlue <= pcBlue) {
+		paethBlue = pixelLeft.getBlue();
+	}
+	else if (pbBlue <= pcBlue) {
+		paethBlue = pixelUp.getBlue();
+	}
+	else {
+		paethBlue = pixelUpLeft.getBlue();
+	}
+
+	cout << "paethBlue" << (int) paethBlue << endl;
+
+	if (paAlpha <= pbAlpha && paAlpha <= pcAlpha) {
+		paethAlpha = pixelLeft.getAlpha();
+	}
+	else if (pbAlpha <= pcAlpha) {
+		paethAlpha = pixelUp.getAlpha();
+	}
+	else {
+		paethAlpha = pixelUpLeft.getAlpha();
+	}
+
+	paethPixel.setPixelValues((unsigned char) paethRed, (unsigned char) paethGreen, (unsigned char) paethBlue, (unsigned char) paethAlpha);
+	return paethPixel;
+}
+
+void EMSCRIPTEN_KEEPALIVE FilterReversePaethRgbPixel(Pixel previousLeftPixel, Pixel previousUpPixel, Pixel previousUpLeftPixel, char &red, char &green, char &blue) {
+	Pixel paethPixel = PaethPredictor(previousLeftPixel, previousUpPixel, previousUpLeftPixel);
+	red = red + paethPixel.getRed();
+	green = green + paethPixel.getGreen();
+	blue = blue + paethPixel.getBlue();
+}
+
+void EMSCRIPTEN_KEEPALIVE FilterReversePaethRgbaPixel(Pixel previousLeftPixel, Pixel previousUpPixel, Pixel previousUpLeftPixel, char &red, char &green, char &blue, char &alpha) {
+	Pixel paethPixel = PaethPredictor(previousLeftPixel, previousUpPixel, previousUpLeftPixel);
+	red = red + paethPixel.getRed();
+	green = green + paethPixel.getGreen();
+	blue = blue + paethPixel.getBlue();
+	alpha = alpha + paethPixel.getAlpha();
 }
 
 int EMSCRIPTEN_KEEPALIVE readHeader(char* fileContents, HeaderInfo &header) {
@@ -221,11 +331,6 @@ int EMSCRIPTEN_KEEPALIVE readHeader(char* fileContents, HeaderInfo &header) {
 void EMSCRIPTEN_KEEPALIVE ProcessImageData() {
 		pixelVector.reserve(4);
 		integerPixelVector.reserve(4);
-		HeaderInfo header;
-		int width = header.getWidth();
-		int height = header.getHeight();
-		imageHeight = height;
-		imageWidth = width;
 		//Header
 		int nextChunkStart = readHeader(fileContents, header);
 
@@ -354,8 +459,41 @@ void EMSCRIPTEN_KEEPALIVE ProcessImageData() {
 							else if (filterType == 2 && i > 0) {
 								FilterReverseUpRgbaPixel(pixelVector[((i - 1) * header.getWidth()) + j], red, green, blue, alpha);
 							}
+							//This needs more conditions
+							else if (filterType == 3) {
+								Pixel pixelLeft = pixelVector[(i * header.getWidth()) + j - 1];
+								Pixel pixelUp = pixelVector[((i - 1) * header.getWidth()) + j];
+								if ( j > 0 ) {
+									pixelLeft.setPixelValues(0,0,0,0);
+								}
+								if ( i > 0 ) {
+									pixelUp.setPixelValues(0,0,0,0);
+								}
+
+								FilterReverseAverageRgbaPixel(pixelLeft, pixelUp, red, green, blue, alpha);
+							}
+							else if (filterType == 4) {
+								cout << "Filter 4" << endl;
+								Pixel pixelLeft = pixelVector[(i * header.getWidth()) + j - 1];
+								Pixel pixelUp = pixelVector[((i - 1) * header.getWidth()) + j];
+								Pixel pixelUpLeft = pixelVector[((i - 1) * header.getWidth()) + j - 1];
+								if ( j > 0 ) {
+									pixelLeft.setPixelValues(0,0,0,0);
+									pixelUp.setPixelValues(0,0,0,0);
+								}
+								if ( i > 0 ) {
+									pixelUp.setPixelValues(0,0,0,0);
+									pixelUpLeft.setPixelValues(0,0,0,0);
+								}
+
+								FilterReversePaethRgbaPixel(pixelLeft, pixelUp, pixelUpLeft, red, green, blue, alpha);
+							}
 
 							newPixel.setPixelValues(red, green, blue, alpha);
+							cout << newPixel.getRed() << endl;
+							cout << newPixel.getGreen() << endl;
+							cout << newPixel.getBlue() << endl;
+							cout << newPixel.getAlpha() << endl;
 							pixelVector.push_back(newPixel);
 							integerPixelVector.push_back(newPixel.getRGBA());
 
@@ -373,7 +511,38 @@ void EMSCRIPTEN_KEEPALIVE ProcessImageData() {
 							else if (filterType == 2 && i > 0) {
 								FilterReverseUpRgbPixel(pixelVector[((i - 1) * header.getWidth()) + j], red, green, blue);
 							}
+							//This needs more conditions
+							else if (filterType == 3) {
+								Pixel pixelLeft = pixelVector[(i * header.getWidth()) + j - 1];
+								Pixel pixelUp = pixelVector[((i - 1) * header.getWidth()) + j];
+								if ( j == 0 ) {
+									pixelLeft.setPixelValues(0,0,0,0);
+								}
+								if ( i == 0 ) {
+									pixelUp.setPixelValues(0,0,0,0);
+								}
+								FilterReverseAverageRgbPixel(pixelLeft, pixelUp, red, green, blue);
+							}
+							else if (filterType == 4) {
+								Pixel pixelLeft = pixelVector[(i * header.getWidth()) + j - 1];
+								Pixel pixelUp = pixelVector[((i - 1) * header.getWidth()) + j];
+								Pixel pixelUpLeft = pixelVector[((i - 1) * header.getWidth()) + j - 1];
+								if ( j == 0 ) {
+									pixelLeft.setPixelValues(0,0,0,0);
+									pixelUp.setPixelValues(0,0,0,0);
+								}
+								if ( i == 0 ) {
+									pixelUp.setPixelValues(0,0,0,0);
+									pixelUpLeft.setPixelValues(0,0,0,0);
+								}
+								FilterReversePaethRgbPixel(pixelLeft, pixelUp, pixelUpLeft, red, green, blue);
+							}
+
 							newPixel.setPixelValues(red, green, blue, (char)0);
+							cout << newPixel.getRed() << endl;
+							cout << newPixel.getGreen() << endl;
+							cout << newPixel.getBlue() << endl;
+
 							pixelVector.push_back(newPixel);
 							integerPixelVector.push_back(newPixel.getRGBA());
 						}
