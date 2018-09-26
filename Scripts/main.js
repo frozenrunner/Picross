@@ -65,7 +65,7 @@ picross.viewModel = function(initImageWidth, initImageHeight) {
     self.getColumnNumbers = function(data) {
         let count = 0;
         let columnString = '';
-        for(let i = 0, len = self.imageData().length; i < len; i++){
+        for(let i = 0, len = self.imageHeight(); i < len; i++){
             if (imageData[i][data()] !== 'rgba(0,0,0,0)'){
                 count++;
             }

@@ -463,27 +463,41 @@ void EMSCRIPTEN_KEEPALIVE ProcessImageData() {
 							else if (filterType == 3) {
 								Pixel pixelLeft = pixelVector[(i * header.getWidth()) + j - 1];
 								Pixel pixelUp = pixelVector[((i - 1) * header.getWidth()) + j];
-								if ( j > 0 ) {
-									pixelLeft.setPixelValues(0,0,0,0);
+								if (j == 0) {
+									pixelLeft.setPixelValues(0, 0, 0, 0);
 								}
-								if ( i > 0 ) {
-									pixelUp.setPixelValues(0,0,0,0);
+								if (i == 0) {
+									pixelUp.setPixelValues(0, 0, 0, 0);
 								}
 
 								FilterReverseAverageRgbaPixel(pixelLeft, pixelUp, red, green, blue, alpha);
 							}
 							else if (filterType == 4) {
 								cout << "Filter 4" << endl;
-								Pixel pixelLeft = pixelVector[(i * header.getWidth()) + j - 1];
-								Pixel pixelUp = pixelVector[((i - 1) * header.getWidth()) + j];
-								Pixel pixelUpLeft = pixelVector[((i - 1) * header.getWidth()) + j - 1];
-								if ( j > 0 ) {
-									pixelLeft.setPixelValues(0,0,0,0);
-									pixelUp.setPixelValues(0,0,0,0);
+
+								int leftIndex = (i * header.getWidth()) + j - 1,
+									upIndex = ((i - 1) * header.getWidth()) + j,
+									upLeftIndex = ((i - 1) * header.getWidth()) + j - 1;
+
+								Pixel pixelLeft = pixelVector[leftIndex];
+								Pixel pixelUp = pixelVector[upIndex];
+								
+								Pixel pixelUpLeft;
+
+								if (upLeftIndex < 0) {
+									pixelUpLeft.zeroPixels();
 								}
-								if ( i > 0 ) {
-									pixelUp.setPixelValues(0,0,0,0);
-									pixelUpLeft.setPixelValues(0,0,0,0);
+								else {
+									pixelUpLeft = pixelVector[upLeftIndex];
+								}
+
+								if (j == 0) {
+									pixelLeft.zeroPixels();
+									pixelUpLeft.zeroPixels();
+								}
+								if (i == 0) {
+									pixelUp.zeroPixels();
+									pixelUpLeft.zeroPixels();
 								}
 
 								FilterReversePaethRgbaPixel(pixelLeft, pixelUp, pixelUpLeft, red, green, blue, alpha);
@@ -515,11 +529,11 @@ void EMSCRIPTEN_KEEPALIVE ProcessImageData() {
 							else if (filterType == 3) {
 								Pixel pixelLeft = pixelVector[(i * header.getWidth()) + j - 1];
 								Pixel pixelUp = pixelVector[((i - 1) * header.getWidth()) + j];
-								if ( j == 0 ) {
-									pixelLeft.setPixelValues(0,0,0,0);
+								if (j == 0) {
+									pixelLeft.zeroPixels();
 								}
-								if ( i == 0 ) {
-									pixelUp.setPixelValues(0,0,0,0);
+								if (i == 0) {
+									pixelUp.zeroPixels();
 								}
 								FilterReverseAverageRgbPixel(pixelLeft, pixelUp, red, green, blue);
 							}
@@ -527,13 +541,13 @@ void EMSCRIPTEN_KEEPALIVE ProcessImageData() {
 								Pixel pixelLeft = pixelVector[(i * header.getWidth()) + j - 1];
 								Pixel pixelUp = pixelVector[((i - 1) * header.getWidth()) + j];
 								Pixel pixelUpLeft = pixelVector[((i - 1) * header.getWidth()) + j - 1];
-								if ( j == 0 ) {
-									pixelLeft.setPixelValues(0,0,0,0);
-									pixelUp.setPixelValues(0,0,0,0);
+								if (j == 0) {
+									pixelLeft.zeroPixels();
+									pixelUp.zeroPixels();
 								}
-								if ( i == 0 ) {
-									pixelUp.setPixelValues(0,0,0,0);
-									pixelUpLeft.setPixelValues(0,0,0,0);
+								if (i == 0) {
+									pixelUp.zeroPixels();
+									pixelUpLeft.zeroPixels();
 								}
 								FilterReversePaethRgbPixel(pixelLeft, pixelUp, pixelUpLeft, red, green, blue);
 							}

@@ -13,7 +13,7 @@
 <body>
     <input type="file" id="fileInput"/>
     <div id="picross" class="ui-main-container">
-        <div class="ui-column-numbers" data-bind="foreach: imageData">
+        <div class="ui-column-numbers" data-bind="foreach: imageData()[0]">
             <div class="ui-number-hint ui-number-hint-column" data-bind="text: $parent.getColumnNumbers($index)"></div>
         </div>
         <div class="ui-row-numbers" data-bind="foreach: imageData">

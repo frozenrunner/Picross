@@ -32,7 +32,7 @@ Pixel::Pixel(unsigned char red, unsigned char green, unsigned char blue, unsigne
 	setPixelValues(red, green, blue, alpha);
 }
 
-unsigned int EMSCRIPTEN_KEEPALIVE Pixel::getRGBA() {
+unsigned int Pixel::getRGBA() {
 	return _rgba;
 }
 
@@ -69,6 +69,10 @@ void Pixel::setPixelValues(unsigned char red, unsigned char green, unsigned char
 #ifdef DEBUG
 	cout << bitset<32>(_rgba) << endl;
 #endif
+}
+
+void Pixel::zeroPixels() {
+	_rgba = 0;
 }
 
 Pixel::~Pixel()
