@@ -120,6 +120,8 @@ function readImageData(event) {
   <input type="file" id="fileInput" @change="readImageData"/>
   <img :src="megaman"/>
   <h1>{{title}}</h1>
+  <p>Download the megaman image and use it with the file upload to see the web assembly png reader code in action.</p>
+  <p>The image will be processed and rows and columns will be show numbers for the non-white pixels in the image</p>
     <div class="ui-main-container">
         <div class="ui-column-numbers">
             <div class="ui-number-hint ui-number-hint-column" v-for="n in appImageWidth">{{getColumnNumbers(n)}}</div>
