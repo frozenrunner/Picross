@@ -120,8 +120,11 @@ function readImageData(event) {
   <input type="file" id="fileInput" @change="readImageData"/>
   <img :src="megaman"/>
   <h1>{{title}}</h1>
-  <p>Download the megaman image and use it with the file upload to see the web assembly png reader code in action.</p>
-  <p>The image will be processed and rows and columns will be show numbers for the non-white pixels in the image</p>
+  <p>Download the megaman image and use it with the file upload to see the Web Assembly png reader code in action.</p>
+  <p>The image will be processed and rows and columns will be show numbers for the non-white pixels in the corresponding row/column</p>
+  <p>A simple (and incomplete) png reader was written in C++ and then compiled to Web Assembly.</p>
+  <p>The Web Assembly code is what is used to decode the image and get the corresponding pixel colours.</p>
+  <p>Full code available at: <a href="https://github.com/frozenrunner/Picross">Picross GitHub Repository</a></p>
     <div class="ui-main-container">
         <div class="ui-column-numbers">
             <div class="ui-number-hint ui-number-hint-column" v-for="n in appImageWidth">{{getColumnNumbers(n)}}</div>
@@ -133,10 +136,6 @@ function readImageData(event) {
             <template v-for="imageRow in imageData">
                 <div class="ui-square-container material-icons" v-for="cell in imageRow" :style="{background: cell}"></div>
             </template>
-        </div>
-        <div class="ui-button-container">
-            <div class="ui-button-cross" data-bind="css: { active: !checkActive() }, click: activateCross"><i class="material-icons">close</i></div>
-            <div class="ui-button-check" data-bind="css: { active: checkActive }, click: activateCheck"><i class="material-icons">check</i></div>
         </div>
     </div>
 </template>
