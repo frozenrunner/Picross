@@ -10,7 +10,7 @@ function getColumnNumbers(n) {
     let count = 0;
     let columnString = '';
     for(let i = 0, len = appImageHeight; i < len; i++){
-        if (this.imageData[i][n] !== 'rgba(255,255,255,1)'){
+        if (imageData[i][n] !== 'rgba(255,255,255,1)'){
             count++;
         }
         else {
@@ -23,10 +23,10 @@ function getColumnNumbers(n) {
             }
         }
     }
-    if (count > 0 && count < this.imageHeight) {
+    if (count > 0 && count < appImageHeight) {
         columnString = count.toString();
     }
-    if (count === this.imageHeight){
+    if (count === appImageHeight){
         columnString = count.toString();
     }
 
@@ -37,8 +37,8 @@ function getRowNumbers(n) {
     n--; /*Vue for loop with integer values starts at 1*/
     let count = 0;
     let rowString = '';
-    for(let i = 0, len = this.imageData[n].length; i < len; i++){
-        if (this.imageData[n][i] !== 'rgba(255,255,255,1)'){
+    for(let i = 0, len = imageData[n].length; i < len; i++){
+        if (imageData[n][i] !== 'rgba(255,255,255,1)'){
             count++;
         }
         else {
@@ -51,10 +51,10 @@ function getRowNumbers(n) {
             }
         }
     }
-    if (count > 0 && count < this.imageData[n].length) {
+    if (count > 0 && count < imageData[n].length) {
         rowString = count.toString();
     }
-    if (count === this.imageData[n].length){
+    if (count === imageData[n].length){
         rowString = count.toString();
     }
     return rowString;
