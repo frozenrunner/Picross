@@ -131,9 +131,9 @@ function readImageData(event) {
             </template>
         </div>
         <div class="ui-button-container">
-                <div class="ui-button-cross" data-bind="css: { active: !checkActive() }, click: activateCross"><i class="material-icons">close</i></div>
-                <div class="ui-button-check" data-bind="css: { active: checkActive }, click: activateCheck"><i class="material-icons">check</i></div>
-            </div>
+            <div class="ui-button-cross" data-bind="css: { active: !checkActive() }, click: activateCross"><i class="material-icons">close</i></div>
+            <div class="ui-button-check" data-bind="css: { active: checkActive }, click: activateCheck"><i class="material-icons">check</i></div>
+        </div>
     </div>
 </template>
 
