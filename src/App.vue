@@ -1,5 +1,6 @@
 <script setup>
 import { reactive } from 'vue'
+import megaman from './assets/Megaman_completed_data.png'
 const title = "Picross";
 const imageData = reactive([]);
 let appImageHeight = 0;
@@ -117,6 +118,7 @@ function readImageData(event) {
 
 <template>
   <input type="file" id="fileInput" @change="readImageData"/>
+  <img :src="megaman"/>
   <h1>{{title}}</h1>
     <div class="ui-main-container">
         <div class="ui-column-numbers">
