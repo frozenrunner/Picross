@@ -1,37 +1,16 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Picross</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + Vue</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" media="screen" href="Content/main.css" />
-    <script src="Scripts/knockout-3.4.2.js"></script>
-    <script src="Scripts/main.js" defer></script>
-</head>
-<body>
-    <input type="file" id="fileInput"/>
-    <div id="picross" class="ui-main-container">
-        <div class="ui-column-numbers" data-bind="foreach: imageData()[0]">
-            <div class="ui-number-hint ui-number-hint-column" data-bind="text: $parent.getColumnNumbers($index)"></div>
-        </div>
-        <div class="ui-row-numbers" data-bind="foreach: imageData">
-            <div class="ui-number-hint ui-number-hint-row" data-bind="text: $parent.getRowNumbers($data)"></div>
-        </div>
-        <div id="gameContainer" class="ui-game-container" data-bind="foreach: imageData">
-            <!-- ko foreach: $data -->
-            <div class="ui-square-container material-icons"  data-bind="click: $parents[1].revealSquare.bind($data, $parentContext.$index(), $index())">
-                <div data-bind="attr: { 'data-row': $parentContext.$index(), 'data-column': $index}, style: {'background': $data}, css: {'ui-hidden': $parents[1].userBoard()[$parentContext.$index()][$index()]() === 0, 'ui-blocked': $parents[1].userBoard()[$parentContext.$index()][$index()]() === 2, 'ui-incorrect': $parents[1].userBoard()[$parentContext.$index()][$index()]() === 3 }">
-                </div>
-            </div>
-            <!-- /ko -->
-        </div>
-        <div class="ui-button-container">
-            <div class="ui-button-cross" data-bind="css: { active: !checkActive() }, click: activateCross"><i class="material-icons">close</i></div>
-            <div class="ui-button-check" data-bind="css: { active: checkActive }, click: activateCheck"><i class="material-icons">check</i></div>
-        </div>
-    </div>
-    <script async type="text/javascript" src="Scripts/imageReader.js"></script>
-</body>
+    <link href="/src/main.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+    <script async type="text/javascript" src="src/imageReader.js"></script>
+  </body>
 </html>
