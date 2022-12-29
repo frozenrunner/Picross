@@ -5,7 +5,7 @@ name: Build and Deploy
 # Controls when the workflow will run
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
 permissions:
   contents: write
   id-token: write
